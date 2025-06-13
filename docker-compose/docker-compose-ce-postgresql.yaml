@@ -19,7 +19,7 @@ services:
       - db
     environment:
       APP_FULL_BASE_URL: "{APP_FULL_BASE_URL:-https://passbolt.local}"
-      DATASOURCES_DEFAULT_DRIVER: "{DATASOURCES_DEFAULT_DRIVER:-Cake\Database\Driver\Postgres}"
+      DATASOURCES_DEFAULT_DRIVER: "${DATASOURCES_DEFAULT_DRIVER:-Cake\\Database\\Driver\\Postgres}"
       DATASOURCES_DEFAULT_ENCODING:  "{DATASOURCES_DEFAULT_ENCODING:-utf8}"
       DATASOURCES_DEFAULT_URL: "postgres://{POSTGRES_USER:-passbolt}:{POSTGRES_PASSWORD:-P4ssb0lt}@db:5432/{POSTGRES_DB:-passbolt}?schema=public"
       EMAIL_TRANSPORT_DEFAULT_HOST: "{EMAIL_TRANSPORT_DEFAULT_HOST:-smtp.mailtrap.io}"

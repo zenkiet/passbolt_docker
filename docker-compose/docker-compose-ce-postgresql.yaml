@@ -3,9 +3,9 @@ services:
     image: postgres:latest
     restart: unless-stopped
     environment:
-      POSTGRES_DB: "passbolt"
-      POSTGRES_USER: "passbolt"
-      POSTGRES_PASSWORD: "P4ssb0lt"
+      POSTGRES_DB: "${POSTGRES_DB:-passbolt}"
+      POSTGRES_USER: "{POSTGRES_USER:-passbolt}"
+      POSTGRES_PASSWORD: "{POSTGRES_PASSWORD:-P4ssb0lt}"
     volumes:
       - database_volume:/var/lib/postgresql/data
 
@@ -18,12 +18,12 @@ services:
     depends_on:
       - db
     environment:
-      APP_FULL_BASE_URL: https://passbolt.local
-      DATASOURCES_DEFAULT_DRIVER: Cake\Database\Driver\Postgres
-      DATASOURCES_DEFAULT_ENCODING: "utf8"
-      DATASOURCES_DEFAULT_URL: "postgres://passbolt:P4ssb0lt@db:5432/passbolt?schema=passbolt"
-      EMAIL_TRANSPORT_DEFAULT_HOST: "smtp.domain.tld"
-      EMAIL_TRANSPORT_DEFAULT_PORT: 587
+      APP_FULL_BASE_URL: "{APP_FULL_BASE_URL:-https://passbolt.local}"
+      DATASOURCES_DEFAULT_DRIVER: "{DATASOURCES_DEFAULT_DRIVER:-Cake\Database\Driver\Postgres}"
+      DATASOURCES_DEFAULT_ENCODING:  "{DATASOURCES_DEFAULT_ENCODING:-utf8}"
+      DATASOURCES_DEFAULT_URL: "postgres://{POSTGRES_USER:-passbolt}:{POSTGRES_PASSWORD:-P4ssb0lt}@db:5432/{POSTGRES_DB:-passbolt}?schema=public"
+      EMAIL_TRANSPORT_DEFAULT_HOST: "{EMAIL_TRANSPORT_DEFAULT_HOST:-smtp.mailtrap.io}"
+      EMAIL_TRANSPORT_DEFAULT_PORT: "{EMAIL_TRANSPORT_DEFAULT_PORT:-587}"
     volumes:
       - gpg_volume:/etc/passbolt/gpg
       - jwt_volume:/etc/passbolt/jwt
@@ -34,8 +34,8 @@ services:
     command: >
       bash -c "/usr/bin/wait-for.sh -t 0 db:5432 -- /docker-entrypoint.sh"
     ports:
-      - 80:80
-      - 443:443
+      - ${HTTP_PORT}:80
+      - ${HTTPS_PORT}:443
     #Alternatively for non-root images:
     # - 80:8080
     # - 443:4433
